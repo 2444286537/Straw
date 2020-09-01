@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.straw.api.mapper.QuestionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="QuestionVOResultMap" type="cn.tedu.straw.commons.vo.QuestionVO">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="user_nick_name" property="userNickName" />
+        <result column="created_time" property="createdTime" />
+        <result column="status" property="status" />
+        <result column="hits" property="hits" />
+        <result column="tag_ids" property="tagIds" />
+    </resultMap>
+    <select id="findHotList" resultType="cn.tedu.straw.commons.vo.QuestionListItemVO">
+        select id, title, status, hits
+from question
+where is_public=1
+order by hits desc
+limit 0, 10
+</select>
+    <select id="findMyQuestions" resultMap="QuestionVOResultMap">
+	SELECT
+    id, title, content, status, tag_ids, user_nick_name, hits, created_time
+FROM
+    question
+WHERE
+    user_id=#{user_id}
+ORDER BY
+    modified_time DESC
+</select>
+
+    <select id="findById" resultType="cn.tedu.straw.commons.vo.QuestionDetailVO">
+        select
+	id, title, content, status, tag_ids, user_nick_name, hits, created_time
+from
+	question
+where
+	id=#{id}
+    </select>
+</mapper>
